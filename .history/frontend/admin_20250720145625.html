@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard | ChatBot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1e1e2f, #282843);
+      color: #f8fafc;
+    }
+
+    .sidebar {
+      width: 270px;
+      background: #2e1065;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.4);
+    }
+
+    .sidebar h2 {
+      font-size: 1.7rem;
+      color: #c084fc;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      color: #ddd6fe;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      transition: all 0.3s;
+      font-weight: 500;
+      gap: 0.75rem;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background: #6b21a8;
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      color: #f1f5f9;
+    }
+
+    .logout-btn {
+      padding: 10px 20px;
+      background: #8b5cf6;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.3s;
+    }
+
+    .logout-btn:hover {
+      background: #a78bfa;
+    }
+
+    .cards {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border-radius: 14px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      color: #c084fc;
+    }
+
+    .card p {
+      font-size: 1.6rem;
+      margin-top: 0.5rem;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1.5rem;
+      border-radius: 14px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #f1f5f9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    th {
+      background: #1e1e2f;
+      color: #ddd6fe;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      background: #7c3aed;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-right: 6px;
+      transition: background 0.3s;
+    }
+
+    .action-btn:hover {
+      background: #a78bfa;
+    }
+
+    /* Confirmation Modal */
+    #confirm-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #1e1e2f;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .modal-content h3 {
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      color: #ddd6fe;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-content .action-btn {
+      margin: 0 8px;
+    }
+
+    .modal-content .cancel-btn {
+      background: #ef4444;
+    }
+
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>ChatBot Admin</h2>
+    <a href="#" class="nav-link active" onclick="loadSection('users')"><i data-lucide="users"></i> Users</a>
+    <a href="#" class="nav-link" onclick="loadSection('reset_requests')"><i data-lucide="key-round"></i> Reset Requests</a>
+    <a href="#" class="nav-link" onclick="loadSection('codes')"><i data-lucide="shield-check"></i> Verification Codes</a>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <h1>Admin Dashboard</h1>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Total Users</h3>
+        <p id="total-users">0</p>
+      </div>
+      <div class="card">
+        <h3>Reset Requests</h3>
+        <p id="total-resets">0</p>
+      </div>
+      <div class="card">
+        <h3>Active Codes</h3>
+        <p id="total-codes">0</p>
+      </div>
+    </div>
+
+    <div class="section" id="users-section">
+      <h2>All Registered Users</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Login Time</th>
+            <th>Logout Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-table"></tbody>
+      </table>
+    </div>
+
+    <div class="section" id="reset-section" style="display: none;">
+      <h2>Forgot Password Requests</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Requested At</th>
+          </tr>
+        </thead>
+        <tbody id="reset-requests"></tbody>
+      </table>
+    </div>
+
+    <div class="section" id="code-section" style="display: none;">
+      <h2>Verification/Reset Codes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Code</th>
+            <th>Generated At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="code-table"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Custom Delete Confirmation Modal -->
+  <div id="confirm-modal">
+    <div class="modal-content">
+      <h3>Confirm Deletion</h3>
+      <p id="confirm-message">Are you sure?</p>
+      <button id="confirm-yes" class="action-btn">Yes</button>
+      <button id="confirm-no" class="action-btn cancel-btn">No</button>
+    </div>
+  </div>
+
+  <script>
+  window.onload = async () => {
+    const token = localStorage.getItem("jwtToken");
+    const role = localStorage.getItem("chatbotUserRole");
+
+    if (!token || role !== "admin") {
+      alert("Unauthorized access. Redirecting to login.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    showMessage("Admin successfully logged in!");
+    await loadDashboardData();
+    loadSection('users');
+  };
+
+  async function deleteUser(email) {
+    const token = localStorage.getItem("jwtToken");
+    const res = await fetch('http://localhost:5000/api/admin/delete_user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    showMessage(data.message || "User deleted.");
+    loadDashboardData();
+  }
+
+  async function resetCode(email) {
+    const token = localStorage.getItem("jwtToken");
+    const res = await fetch('http://localhost:5000/api/admin/reset_code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    showMessage(data.message || "Reset code updated.");
+    loadDashboardData();
+  }
+
+  async function resendCode(email) {
+    const token = localStorage.getItem("jwtToken");
+    const res = await fetch('http://localhost:5000/api/admin/resend_code', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ email })
+    });
+
+    const data = await res.json();
+    showMessage(data.message || "Code resent successfully.");
+    loadDashboardData();
+  }
+
+  async function loadDashboardData() {
+    const token = localStorage.getItem("jwtToken");
+    const res = await fetch('http://localhost:5000/api/admin/dashboard', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+    populateTable('users-table', data.users);
+    populateTable('forgot-table', data.forgotRequests);
+    populateTable('reset-table', data.resetCodes);
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | ChatBot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1f1f1f, #3c3c3c);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      font-size: 28px;
+      color: #f5f5f5;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-group label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 6px;
+      color: #ccc;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    .input-group input:focus {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 16px;
+      top: 44px;
+      cursor: pointer;
+      color: #bbb;
+      font-size: 14px;
+    }
+
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: #bbb;
+    }
+
+    .remember-forgot label {
+      display: flex;
+      align-items: center;
+    }
+
+    .remember-forgot input {
+      margin-right: 6px;
+    }
+
+    .remember-forgot a {
+      text-decoration: none;
+      color: #9f7aea;
+      transition: color 0.3s;
+    }
+
+    .remember-forgot a:hover {
+      color: #d6bcfa;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #9f7aea);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, #6b21a8, #8b5cf6);
+    }
+
+    .register {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 20px;
+      color: #bbb;
+    }
+
+    .register a {
+      color: #9f7aea;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .register a:hover {
+      color: #d6bcfa;
+    }
+
+    .message {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <div class="message" id="message"></div>
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required />
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required />
+      <span class="toggle-password" id="togglePassword">Show</span>
+    </div>
+    <div class="remember-forgot">
+      <label><input type="checkbox" id="rememberMe" /> Remember me</label>
+      <a href="forgotpassword.html">Forgot Password?</a>
+    </div>
+    <button class="btn" onclick="login()">Login</button>
+    <div class="register">
+      Don’t have an account? <a href="register.html">Register here</a>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedEmail = localStorage.getItem("userEmail");
+      if (savedEmail) {
+        document.getElementById("email").value = savedEmail;
+        document.getElementById("rememberMe").checked = true;
+      }
+
+      document.getElementById("togglePassword").addEventListener("click", () => {
+        const passwordInput = document.getElementById("password");
+        const toggle = document.getElementById("togglePassword");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          toggle.textContent = "Hide";
+          toggle.style.color = "#7c3aed";
+        } else {
+          passwordInput.type = "password";
+          toggle.textContent = "Show";
+          toggle.style.color = "#bbb";
+        }
+      });
+
+      // ✅ Trigger login on Enter key press
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          login();
+        }
+      });
+    });
+
+    async function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const messageEl = document.getElementById("message");
+
+      if (!email || !password) {
+        messageEl.textContent = "Please enter both email and password.";
+        messageEl.style.color = "red";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          messageEl.textContent = "Login successful!";
+          messageEl.style.color = "limegreen";
+
+          if (document.getElementById("rememberMe").checked) {
+            localStorage.setItem("userEmail", email);
+          } else {
+            localStorage.removeItem("userEmail");
+          }
+
+          setTimeout(() => {
+            window.location.href = data.redirect || "home.html";
+          }, 1000);
+        } else {
+          messageEl.textContent = data.message || "Invalid credentials.";
+          messageEl.style.color = "red";
+        }
+      } catch (err) {
+        messageEl.textContent = "Server error. Try again later.";
+        messageEl.style.color = "red";
+        console.error("Login error:", err);
+      }
+    }
+  </script>
+</body>
+</html>

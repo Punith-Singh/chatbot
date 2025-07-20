@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini ChatBot</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: #0f0f0f;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: white;
+    }
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+    }
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding-right: 10px;
+      scroll-behavior: smooth;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+    .user {
+      background-color: #007bff;
+      color: white;
+      align-self: flex-end;
+    }
+    .bot {
+      background-color: #333;
+      align-self: flex-start;
+    }
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+    .chat-input input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+    }
+    .chat-input button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+    }
+    .chat-input button:disabled {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-box" id="chat-box"></div>
+    <div class="chat-input">
+      <input type="text" id="user-message" placeholder="Type a message..." autocomplete="off" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("user-message");
+    const button = document.querySelector(".chat-input button");
+    const chatBox = document.getElementById("chat-box");
+
+    // Focus input on load
+    window.onload = () => {
+      input.focus();
+    };
+
+    // Escape HTML for safety
+    function escapeHTML(str) {
+      return str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Display a message to chat
+    function displayMessage(message, sender) {
+      const div = document.createElement("div");
+      div.classList.add("message", sender);
+      div.innerHTML = escapeHTML(message);
+      chatBox.appendChild(div);
+      chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+    }
+
+    // Simulated Gemini API call
+    async function getGeminiResponse(prompt) {
+      try {
+        const response = await fetch("/api/gemini", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        return (data.response || "⚠️ Sorry, no response received.").trim();
+      } catch (error) {
+        return "⚠️ Error fetching response.";
+      }
+    }
+
+    // Send message logic
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      displayMessage(text, "user");
+      input.value = "";
+      input.disabled = true;
+      button.disabled = true;
+      document.body.style.cursor = "wait";
+
+      // Show "Thinking..."
+      const thinking = document.createElement("div");
+      thinking.classList.add("message", "bot");
+      thinking.textContent = "⏳ Thinking...";
+      chatBox.appendChild(thinking);
+      chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
+
+      const botReply = await getGeminiResponse(text);
+
+      chatBox.removeChild(thinking);
+      displayMessage(botReply, "bot");
+
+      input.disabled = false;
+      button.disabled = false;
+      input.focus();
+      document.body.style.cursor = "default";
+    }
+
+    // Send on Enter key
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>

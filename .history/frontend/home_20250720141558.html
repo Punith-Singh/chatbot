@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChatBot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      margin: 0;
+      background: #1f1f1f;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      padding: 0;
+    }
+    h1 {
+      margin: 20px 0;
+    }
+    #chat-box {
+      flex-grow: 1;
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 15px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+    }
+    .user {
+      background-color: #007bff;
+      align-self: flex-end;
+      color: white;
+      margin-left: auto;
+    }
+    .bot {
+      background-color: #444;
+      color: white;
+      margin-right: auto;
+    }
+    #input-container {
+      display: flex;
+      width: 90%;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+    #user-message {
+      flex-grow: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    #send-btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border-radius: 8px;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .typing-indicator {
+      font-family: 'Courier New', monospace;
+      font-style: italic;
+      opacity: 0.8;
+      white-space: nowrap;
+      animation: blink 1s steps(1, end) infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+      100% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+  <h1>ChatBot</h1>
+  <div id="chat-box"></div>
+  <div id="input-container">
+    <input type="text" id="user-message" placeholder="Type your message..." autocomplete="off" />
+    <button id="send-btn" onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+
+    function displayMessage(message, sender) {
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", sender);
+      messageDiv.textContent = message;
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    async function getGeminiResponse(prompt) {
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: prompt })
+      });
+      const data = await response.json();
+      return data.response;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById("user-message");
+      const text = input.value.trim();
+      if (!text) return;
+
+      displayMessage(text, "user");
+      input.value = "";
+
+      // Show Typing...
+      const typingMsg = document.createElement("div");
+      typingMsg.classList.add("message", "bot", "typing-indicator");
+      typingMsg.textContent = "✍️ Typing...";
+      chatBox.appendChild(typingMsg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      const response = await getGeminiResponse(text);
+
+      // Remove Typing...
+      chatBox.removeChild(typingMsg);
+
+      displayMessage(response, "bot");
+    }
+
+    // Send message on Enter key
+    document.getElementById("user-message").addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
