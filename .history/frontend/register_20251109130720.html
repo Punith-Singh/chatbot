@@ -104,9 +104,6 @@
       -webkit-mask: 
         linear-gradient(#fff 0 0) content-box, 
         linear-gradient(#fff 0 0);
-      mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
       -webkit-mask-composite: destination-out;
       mask-composite: exclude;
       filter: blur(8px);
@@ -498,6 +495,7 @@
         Object.values(crit).forEach(element => {
             element.classList.remove('text-red-400', 'text-green-400');
             element.classList.add('text-gray-400');
+
             element.textContent = element.textContent.replace('✓ ', '').replace('✗ ', '');
         });
     }

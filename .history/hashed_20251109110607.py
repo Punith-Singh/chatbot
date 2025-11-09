@@ -19,7 +19,7 @@ def verify_pbkdf2_hash(stored, candidate_password):
 
 # Example usage (ONLY run for accounts you own / have permission to test):
 stored = "pbkdf2:sha256:600000$0U90bDFoEjZQstW9$415f63c2e79e29b78d0e7c47dfd12ef5c991453b09ab03ded8fb8fb302b90330"
-candidate = "punith@18"
+candidate = "puni"
 if verify_pbkdf2_hash(stored, candidate):
     print("Password matches")
 else:

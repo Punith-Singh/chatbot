@@ -104,9 +104,6 @@
       -webkit-mask: 
         linear-gradient(#fff 0 0) content-box, 
         linear-gradient(#fff 0 0);
-      mask: 
-        linear-gradient(#fff 0 0) content-box, 
-        linear-gradient(#fff 0 0);
       -webkit-mask-composite: destination-out;
       mask-composite: exclude;
       filter: blur(8px);
@@ -132,7 +129,7 @@
         color: #818cf8;
     }
     input[type="text"].dob-input::placeholder {
-        color: #9ca3af; /* gray-400 */
+        color: #d1d5db; /* Lighter placeholder */
         opacity: 1;
     }
     input[type="date"].dob-input:invalid {
@@ -174,43 +171,14 @@
     /* Input focus glow and shadow */
     .form-input {
       transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      /* **FIX**: Added subtle shadow for depth */
       box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     }
     .form-input:focus {
       border-color: #6366f1; /* indigo-500 */
+      /* **FIX**: Enhanced focus glow */
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
       outline: none;
-    }
-
-    /* Three dot pulse animation */
-    .spinner {
-      display: flex;
-      gap: 4px;
-    }
-    .spinner > div {
-      width: 8px;
-      height: 8px;
-      background-color: white;
-      border-radius: 50%;
-      animation: pulse 1.2s infinite ease-in-out;
-    }
-    .spinner > div:nth-child(1) {
-      animation-delay: -0.24s;
-    }
-    .spinner > div:nth-child(2) {
-      animation-delay: -0.12s;
-    }
-    .spinner > div:nth-child(3) {
-      animation-delay: 0s;
-    }
-    @keyframes pulse {
-      0%, 80%, 100% {
-        transform: scale(0);
-        opacity: 0.5;
-      } 40% {
-        transform: scale(1);
-        opacity: 1;
-      }
     }
 
   </style>
@@ -231,37 +199,29 @@
       </div>
 
       <div class="phone-frame animate-fade-in-up w-full max-w-sm rounded-[56px] border-8 border-gray-800 bg-gray-900 shadow-2xl shadow-indigo-500/10">
+        <!-- **FIX**: Added backdrop-blur for glassmorphism -->
         <div class="inner-screen w-full h-[720px] rounded-[48px] bg-gray-950/70 relative overflow-y-auto px-6 pt-12 pb-6 backdrop-blur-[10px]">
           
           <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-30"></div>
           
           <div class="login-content animate-delay-fade-in-up w-full flex flex-col relative z-20">
+            <!-- **FIX**: Reduced margin-bottom -->
             <h2 class="mb-5 text-center text-3xl font-bold text-white">
               Create Account
             </h2>
 
+            <!-- **FIX**: Changed to space-y-4 for more padding -->
             <form id="signupForm" novalidate class="flex flex-col space-y-4">
               
               <!-- Form-specific error message -->
               <div id="error-message-form" class="hidden items-center justify-center gap-2 rounded-md border border-red-700 bg-red-900/50 p-2 text-sm font-medium text-red-300">
                 <span class="message-text"></span>
               </div>
-              
-              <!-- Password criteria list (hidden by default) -->
-              <div id="password-criteria" class="hidden p-3 rounded-md bg-gray-800 border border-gray-700 text-xs">
-                  <p class="font-medium text-white mb-2">Password must contain:</p>
-                  <ul class="space-y-1">
-                      <li id="length" class="text-gray-400 transition-colors">At least 8 characters</li>
-                      <li id="uppercase" class="text-gray-400 transition-colors">1 uppercase letter (A-Z)</li>
-                      <li id="lowercase" class="text-gray-400 transition-colors">1 lowercase letter (a-z)</li>
-                      <li id="number" class="text-gray-400 transition-colors">1 number (0-9)</li>
-                      <li id="special" class="text-gray-400 transition-colors">1 special character (e.g., !@#)</li>
-                  </ul>
-              </div>
 
               <!-- Full Name -->
               <div class="relative">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <!-- **FIX**: Icon contrast increased -->
                   <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75 .75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
                   </svg>
@@ -269,7 +229,7 @@
                 <input
                   type="text"
                   id="name"
-                  class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-gray-400 transition-colors focus:bg-gray-700"
+                  class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-gray-300 transition-colors focus:bg-gray-700"
                   placeholder="Full Name"
                   required
                 />
@@ -278,6 +238,7 @@
               <!-- Date of Birth -->
               <div class="relative dob-input-container">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <!-- **FIX**: Icon contrast increased -->
                   <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M6.75 2.25A.75.75 0 017.5 3v1.5h9V3A.75.75 0 0118 3v1.5h.75a3 3 0 013 3v11.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V7.5a3 3 0 013-3H6V3a.75.75 0 01.75-.75zM5.25 6.75c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h13.5c.621 0 1.125-.504 1.125-1.125V7.875c0-.621-.504-1.125-1.125-1.125H5.25z" clip-rule="evenodd" />
                   </svg>
@@ -285,13 +246,14 @@
                 <input
                   type="text" 
                   id="dob"
-                  class="form-input peer dob-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 text-white placeholder-gray-400 transition-colors focus:bg-gray-700"
-                  placeholder="Date of Birth (dd/mm/yyyy)"
+                  class="form-input peer dob-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 text-white placeholder-gray-300 transition-colors focus:bg-gray-700"
+                  placeholder="dd/mm/yyyy"
                   required
                   onfocus="(this.type='date')"
                   onblur="if(!this.value) {this.type='text';}"
                 />
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5">
+                    <!-- **FIX**: Icon contrast increased -->
                     <svg class="dob-icon h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5A.75.75 0 015.5 7h9a.75.75 0 010 1.5h-9a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
                     </svg>
@@ -322,6 +284,7 @@
               <!-- Email -->
               <div class="relative">
                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                  <!-- **FIX**: Icon contrast increased -->
                   <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
                     <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
@@ -330,16 +293,17 @@
                 <input
                   type="email"
                   id="email"
-                  class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-gray-400 transition-colors focus:bg-gray-700"
+                  class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-gray-300 transition-colors focus:bg-gray-700"
                   placeholder="Email"
                   required
                 />
               </div>
 
-              <!-- Group Password + Criteria -->
+              <!-- **FIX**: Group Password + Criteria -->
               <div>
                 <div class="relative">
                   <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                    <!-- **FIX**: Icon contrast increased -->
                     <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3A5.25 5.25 0 0012 1.5zm-3.75 5.25v3a1.5 1.5 0 001.5 1.5h4.5a1.5 1.5 0 001.5-1.5v-3a3.75 3.75 0 10-7.5 0z" clip-rule="evenodd" />
                     </svg>
@@ -347,7 +311,7 @@
                   <input
                     type="password"
                     id="password"
-                    class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-gray-400 transition-colors focus:bg-gray-700"
+                    class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-gray-300 transition-colors focus:bg-gray-700"
                     placeholder="Password"
                     required
                     autocomplete="new-password"
@@ -364,18 +328,19 @@
                 </div>
                 <!-- Password criteria list, hidden by default -->
                 <ul id="passwordCriteria" class="hidden list-inside space-y-0.5 pl-1 pt-2 text-xs">
-                  <li id="crit-length" class="text-gray-400">At least 8 characters</li>
-                  <li id="crit-upper" class="text-gray-400">At least 1 uppercase</li>
-                  <li id="crit-lower" class="text-gray-400">At least 1 lowercase</li>
-                  <li id="crit-num" class="text-gray-400">At least 1 number</li>
-                  <li id="crit-special" class="text-gray-400">At least 1 special</li>
+                  <li id="crit-length">At least 8 characters</li>
+                  <li id="crit-upper">At least 1 uppercase</li>
+                  <li id="crit-lower">At least 1 lowercase</li>
+                  <li id="crit-num">At least 1 number</li>
+                  <li id="crit-special">At least 1 special</li>
                 </ul>
               </div>
               
-              <!-- Group Confirm Password + Error -->
+              <!-- **FIX**: Group Confirm Password + Error -->
               <div>
                 <div class="relative">
                   <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5">
+                    <!-- **FIX**: Icon contrast increased -->
                     <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                       <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3A5.25 5.25 0 0012 1.5zm-3.75 5.25v3a1.5 1.5 0 001.5 1.5h4.5a1.5 1.5 0 001.5-1.5v-3a3.75 3.75 0 10-7.5 0z" clip-rule="evenodd" />
                     </svg>
@@ -383,7 +348,7 @@
                   <input
                     type="password"
                     id="confirm-password"
-                    class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-gray-400 transition-colors focus:bg-gray-700"
+                    class="form-input block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-gray-300 transition-colors focus:bg-gray-700"
                     placeholder="Confirm Password"
                     required
                   />
@@ -402,13 +367,10 @@
 
 
               <!-- Submit Button -->
-              <button class="login-btn group relative flex h-11 w-full items-center justify-center rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-base font-semibold text-white disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed" id="submit-btn">
+              <!-- **FIX**: Added gradient, new hover, and fixed class_name typo -->
+              <button class="login-btn group relative flex w-full justify-center rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-base font-semibold text-white transition-all duration-200 ease-in-out hover:from-indigo-400 hover:to-purple-400 hover:scale-[1.03] hover:shadow-lg hover:shadow-indigo-500/40 active:scale-[.98] active:shadow-none disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none" id="submit-btn">
                 <span class="btn-text transition-opacity duration-200">Create Account</span>
-                <div class="spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
+                <div class="spinner absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-2 border-white/30 border-t-white opacity-0 transition-opacity duration-200"></div>
               </button>
 
             </form>
@@ -424,6 +386,7 @@
               </div>
             </div>
 
+            <!-- **FIX**: Add pt-4 for spacing -->
             <div class="pt-5 text-center text-sm text-gray-300">
               Already have an account?
               <a href="login.html" class="font-medium text-indigo-400 hover:text-indigo-200 hover:underline">
@@ -484,11 +447,11 @@
     
     function updateCriteriaUI(element, isValid) {
       if (isValid) {
-        element.classList.remove('text-red-400', 'text-gray-400');
+        element.classList.remove('text-red-400');
         element.classList.add('text-green-400');
         element.textContent = '✓ ' + element.textContent.replace('• ', '').replace('✓ ', '').replace('✗ ', '');
       } else {
-        element.classList.remove('text-green-400', 'text-gray-400');
+        element.classList.remove('text-green-400');
         element.classList.add('text-red-400');
         element.textContent = '✗ ' + element.textContent.replace('• ', '').replace('✓ ', '').replace('✗ ', '');
       }
@@ -497,7 +460,6 @@
     function resetCriteriaUI() {
         Object.values(crit).forEach(element => {
             element.classList.remove('text-red-400', 'text-green-400');
-            element.classList.add('text-gray-400');
             element.textContent = element.textContent.replace('✓ ', '').replace('✗ ', '');
         });
     }

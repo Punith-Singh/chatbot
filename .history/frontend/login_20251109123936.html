@@ -135,37 +135,6 @@
       outline: none;
     }
 
-    /* Three dot pulse animation */
-    .spinner {
-      display: flex;
-      gap: 4px;
-    }
-    .spinner > div {
-      width: 8px;
-      height: 8px;
-      background-color: white;
-      border-radius: 50%;
-      animation: pulse 1.2s infinite ease-in-out;
-    }
-    .spinner > div:nth-child(1) {
-      animation-delay: -0.24s;
-    }
-    .spinner > div:nth-child(2) {
-      animation-delay: -0.12s;
-    }
-    .spinner > div:nth-child(3) {
-      animation-delay: 0s;
-    }
-    @keyframes pulse {
-      0%, 80%, 100% {
-        transform: scale(0);
-        opacity: 0.5;
-      } 40% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
   </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -204,11 +173,16 @@
               <input
                 type="email"
                 id="email"
-                class="form-input peer block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-gray-400 transition-colors focus:border-indigo-500 focus:bg-gray-700 focus:outline-none"
+                class="form-input peer block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-4 text-white placeholder-transparent transition-colors focus:border-indigo-500 focus:bg-gray-700 focus:outline-none"
                 placeholder="Email"
                 required
               />
-              <!-- REMOVED FLOATING LABEL -->
+              <label
+                for="email"
+                class="absolute -top-3 left-9 origin-[0] transform bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-placeholder-shown:bg-transparent peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:scale-75 peer-focus:bg-gray-800 peer-focus:text-indigo-400"
+              >
+                <span>Email</span>
+              </label>
             </div>
 
             <div class="relative mb-4">
@@ -220,11 +194,16 @@
               <input
                 type="password"
                 id="password"
-                class="form-input peer block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-gray-400 transition-colors focus:border-indigo-500 focus:bg-gray-700 focus:outline-none"
+                class="form-input peer block w-full rounded-md border border-gray-700 bg-gray-800 py-3 pl-11 pr-10 text-white placeholder-transparent transition-colors focus:border-indigo-500 focus:bg-gray-700 focus:outline-none"
                 placeholder="Password"
                 required
               />
-              <!-- REMOVED FLOATING LABEL -->
+              <label
+                for="password"
+                class="absolute -top-3 left-9 origin-[0] transform bg-gray-800 px-2 text-sm text-gray-400 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-placeholder-shown:bg-transparent peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:scale-75 peer-focus:bg-gray-800 peer-focus:text-indigo-400"
+              >
+                <span>Password</span>
+              </label>
               <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-gray-500 hover:text-indigo-400">
                 <svg class="eye-icon h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
@@ -241,25 +220,19 @@
                 <input type="checkbox" id="rememberMe" class="mr-2 h-4 w-4 rounded border-gray-600 bg-gray-700 text-indigo-600 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-gray-900" />
                 Remember me
               </label>
-              <a href="forgotpassword.html" class="text-sm text-indigo-400 hover:text-indigo-200 hover:underline">
+              <a href="forgot-password.html" class="text-sm text-indigo-400 hover:text-indigo-200 hover:underline">
                 Forgot password?
               </a>
             </div>
 
-            <!-- **FIX**: Added fixed height h-11 and items-center to prevent jump -->
-            <button class="login-btn group relative flex h-11 w-full items-center justify-center rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-base font-semibold text-white disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed" id="login-btn">
+            <button class="login-btn group relative flex w-full justify-center rounded-md bg-gradient-to-r from-indigo-500 to-purple-500 px-4 py-2.5 text-base font-semibold text-white transition-all duration-200 ease-in-out hover:from-indigo-400 hover:to-purple-400 hover:shadow-lg hover:shadow-indigo-500/40 active:shadow-none disabled:bg-gray-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed disabled:hover:shadow-none" id="login-btn">
               <span class="btn-text transition-opacity duration-200">Login</span>
-              <!-- **FIX**: New spinner HTML -->
-              <div class="spinner absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
+              <div class="spinner absolute left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-2 border-white/30 border-t-white opacity-0 transition-opacity duration-200"></div>
             </button>
 
             <div class="mt-6 text-center text-sm text-gray-300">
               Don't have an account?
-              <a href="register.html" class="font-medium text-indigo-400 hover:text-indigo-200 hover:underline">
+              <a href="signup.html" class="font-medium text-indigo-400 hover:text-indigo-200 hover:underline">
                 Register here
               </a>
             </div>
